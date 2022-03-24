@@ -6,19 +6,20 @@ const expressSession = require('express-session')
 const mysqlSessionStore = require("express-mysql-session")(expressSession);
 const handlebars = require('express3-handlebars')
 const passport = require("passport")
-    , LocalStrategy = require("passport-local").Strategy;
 const logger = require('morgan');
+const cors = require('cors');
 
-//const dbconfig = require('./config/database')
+const dbconfig = require('./config/database')
 const con = require('./database/database');
 
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+const usersRouter = require('./routes/user/users');
 const loginRouter = require('./routes/auth/login');
+const chatRouter = require('./routes/chat/chat');
 
 const app = express();
 
-//const sessionStore = new mysqlSessionStore(dbconfig);
+const sessionStore = new mysqlSessionStore(dbconfig.development);
 
 // view engine setup
 app.engine('handlebars', handlebars({
@@ -36,7 +37,8 @@ app.use(cookieParser());
 app.use(expressSession({
   secret: 'my key',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  store: sessionStore
 }));
 
 // passport 초기화 및 session 연결
@@ -45,9 +47,13 @@ app.use(passport.session());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+// ajax 요청 시 cors 지원
+app.use(cors());
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/login', loginRouter);
+app.use('/chat', chatRouter);
 
 // passport 설정
 let configPassport = require('./passport/passport');

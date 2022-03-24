@@ -5,9 +5,9 @@
 const mysql = require('mysql');
 const config = require('../config/database')
 
-const con = mysql.createConnection(config.developement);
+const con = mysql.createConnection(config.development);
 
-console.dir(config.developement)
+console.dir(config.development)
 
 con.connect((err) => {
   if (err) {

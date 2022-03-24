@@ -1,0 +1,44 @@
+<div class="container">
+    <h4>Chat</h4>
+    <form class="form-inline">
+      <div class="form-group">
+        <label for="msgForm">Message: </label>
+        <input type="text" class="form-control" id="msgForm">
+      </div>
+      <button type="submit" class="btn btn-info">Send</button>
+    </form>
+    <div id="chatLogs"></div>
+</div>
+<script>
+$(function(){
+    // socket.io 서버에 접속한다
+    var socket = io();
+
+    // 서버로 자신의 정보를 전송한다. -> DB상의 정보로 방 생성하기
+    socket.emit("login", {
+      name: 'fullth',
+      userid: "xoghksdla@gmail.com"
+    });
+
+    // 서버로부터의 메시지가 수신되면
+    socket.on("login", function(data) {
+      $("#chatLogs").append("<div><strong>" + data + "</strong> 님이 채팅에 참여하셨습니다.</div>");
+    });
+
+    // 서버로부터의 메시지가 수신되면
+    socket.on("chat", function(data) {
+      $("#chatLogs").append("<div>" + data.msg + " : from <strong>" + data.from.name + "</strong></div>");
+    });
+
+    // Send 버튼이 클릭되면
+    $("form").submit(function(e) {
+      e.preventDefault();
+      var $msgForm = $("#msgForm");
+
+      // 서버로 메시지를 전송한다.
+      socket.emit("chat", { msg: $msgForm.val() });
+      $msgForm.val("");
+    });
+
+  });
+  </script>
