@@ -1,16 +1,6 @@
-function chat(socket, io) {
-  // 접속한 클라이언트의 정보가 수신되면
-  socket.on('login', function(data) {
-    console.log('Client logged-in:\n name:' + data.name + '\n userid: ' + data.userid);
+const con = require('../database/database');
 
-    // socket에 클라이언트 정보를 저장한다
-    socket.name = data.name;
-    socket.userid = data.userid;
-
-    // 접속된 모든 클라이언트에게 메시지를 전송한다
-    io.emit('login', data.name );
-  });
-
+function chat(io, socket) {
   // 클라이언트로부터의 메시지가 수신되면
   socket.on('chat', function(data) {
     console.log('Message from %s: %s', socket.name, data.msg);
@@ -34,6 +24,11 @@ function chat(socket, io) {
 
     // 특정 클라이언트에게만 메시지를 전송한다
     // io.to(id).emit('s2c chat', data);
+  });
+
+  socket.on("create-room", (room) => {
+    console.log(`방 ${room.roomId} 이 생성되었습니다.`);
+    socket.join(room.roomId);
   });
 
   // force client disconnect from server

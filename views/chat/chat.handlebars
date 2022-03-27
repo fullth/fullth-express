@@ -1,5 +1,5 @@
 <div class="container">
-    <h4>Chat</h4>
+    <h4>{{imageInfo.title}}</h4>
     <form class="form-inline">
       <div class="form-group">
         <label for="msgForm">Message: </label>
@@ -12,14 +12,11 @@
 <script>
 $(function(){
     // socket.io 서버에 접속한다
-    var socket = io();
+    let socket = io();
 
-    // 서버로 자신의 정보를 전송한다. -> DB상의 정보로 방 생성하기
-    socket.emit("login", {
-      name: 'fullth',
-      userid: "xoghksdla@gmail.com"
-    });
-
+    data = {command: 'create', roomId: {{imageInfo.title}}, roomOwner: '로그인된 계정' }
+    socket.emit("create-room", data);
+    
     // 서버로부터의 메시지가 수신되면
     socket.on("login", function(data) {
       $("#chatLogs").append("<div><strong>" + data + "</strong> 님이 채팅에 참여하셨습니다.</div>");
@@ -30,10 +27,14 @@ $(function(){
       $("#chatLogs").append("<div>" + data.msg + " : from <strong>" + data.from.name + "</strong></div>");
     });
 
+    socket.on("create-room", function(data) {
+      $("#chatLogs").append("<div> 방 " + data + "  생성됨</strong></div>");
+    });
+
     // Send 버튼이 클릭되면
     $("form").submit(function(e) {
       e.preventDefault();
-      var $msgForm = $("#msgForm");
+      let $msgForm = $("#msgForm");
 
       // 서버로 메시지를 전송한다.
       socket.emit("chat", { msg: $msgForm.val() });

@@ -19,7 +19,7 @@ module.exports = function(app, passport, db) {
     // google login 성공과 실패 리다이렉트
     app.get("/auth/google/callback",
         passport.authenticate("google", {
-            successRedirect: "/",
+            successRedirect: "/home",
             failureRedirect: "/login",
         })
     );

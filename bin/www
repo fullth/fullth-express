@@ -96,5 +96,5 @@ const io = require('socket.io')(server);
 const chat = require('../socket/chat');
 
 io.on('connection', socket => {
-  chat(socket, io);
+  chat(io, socket);
 });

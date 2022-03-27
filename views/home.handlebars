@@ -1,0 +1,26 @@
+<div class="container">
+    <form method="post" action="/home/upload" enctype="multipart/form-data">
+        <div class="button">
+            <label for="chooseFile">
+                👉 CLICK HERE! 👈
+            </label>
+        </div>
+        <input type="file" id="chooseFile" name="file" accept="image/*">
+        <button type="submit">Upload</button>
+    </form> 
+    <hr>
+    <div class="row">
+        {{#each images}}
+            <div class="col-sm-4 col-md-4">
+                <div class="thumbnail">
+                    <img src={{image}} alt="이미지를 표시할 수 없습니다.">
+                    <div class="caption">
+                        <h3>{{title}}</h3>
+                        <p>생성자: {{owner}}</p>
+                        <p><a id="dynamicRoom1" href="/chat/{{id}}" class="btn btn-primary" role="button">Chat!</a></p>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</div>

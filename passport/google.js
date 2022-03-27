@@ -14,7 +14,6 @@ module.exports = function(app, passport, db) {
 
             db.query("SELECT * FROM Users WHERE provider = ? AND email = ?", [profile.provider, profile.email
                 ], function(err, result) {
-                    console.dir('Query Result: ' + result)
                     console.dir(result);
                     if(err) { throw err; }
                     

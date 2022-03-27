@@ -16,6 +16,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/user/users');
 const loginRouter = require('./routes/auth/login');
 const chatRouter = require('./routes/chat/chat');
+const homeRouter = require('./routes/home');
 
 const app = express();
 
@@ -35,7 +36,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(expressSession({
-  secret: 'my key',
+  secret: 'secret key',
   resave: false,
   saveUninitialized: false,
   store: sessionStore
@@ -50,10 +51,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 // ajax 요청 시 cors 지원
 app.use(cors());
 
+// TODO DRY!!!
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/login', loginRouter);
 app.use('/chat', chatRouter);
+app.use('/home', homeRouter);
 
 // passport 설정
 let configPassport = require('./passport/passport');
